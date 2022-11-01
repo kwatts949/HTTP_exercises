@@ -28,8 +28,8 @@ describe Application do
       response = get("/albums")
 
       expect(response.status).to eq(200)
-      expect(response.body).to include("<div><a href='/albums/1'>Doolittle</a></div><br>")
-      expect(response.body).to include("<div><a href='/albums/6'>Lover</a></div><br>")
+      expect(response.body).to include("<div><a href='/albums/1'>Doolittle</a></div>")
+      expect(response.body).to include("<div><a href='/albums/6'>Lover</a></div>")
     end
   end
 
@@ -38,8 +38,28 @@ describe Application do
       response = get('/artists')
 
       expect(response.status).to eq(200)
-      expect(response.body).to include("<div><a href='/artists/1'>Pixies</a></div><br>")
-      expect(response.body).to include("<div><a href='/artists/4'>Nina Simone</a></div><br>")
+      expect(response.body).to include("<div><a href='/artists/1'>Pixies</a></div>")
+      expect(response.body).to include("<div><a href='/artists/4'>Nina Simone</a></div>")
+    end
+  end
+
+   context "GET /albums/new" do
+    it 'returns an html form to create a new album' do
+      response = get('/albums/new')
+
+      expect(response.status).to eq(200)
+      expect(response.body).to include('<form method="POST" action="/albums">')
+      expect(response.body).to include('input type="text" name="title"')
+    end
+  end
+
+  context 'GET /artists/new' do
+    it 'returns an html form to create a new artist' do
+      response = get("/artists/new")
+
+      expect(response.status).to eq(200)
+      expect(response.body).to include('<form method="POST" action="/artists">')
+      expect(response.body).to include('input type="text" name="name"')
     end
   end
 
@@ -64,27 +84,21 @@ describe Application do
     end
   end
 
-  context "POST /albums" do
-    it 'creates a new album' do
-      response = post("/albums", title: "Voyage", release_year: '2022', artist_id: 2)
+  context "POST /artists" do
+    it 'creates an artist and returns a confirmation page' do
+      response = post('/artists', name: "my_artist")
 
-      expect(response.status).to eq(200)
-      expect(response.body).to eq("")
-
-      response = get('/albums')
-      expect(response.body).to include("Voyage")
+      expect(response.status).to eq (200)
+      expect(response.body).to include('<h1>Artist saved: my_artist</h1>')
     end
   end
 
-  context "POST /artists" do
-    it 'creates a new artist' do
-      response = post('/artists', name: 'Wild Nothing', genre: 'Indie')
+  context "POST /albums" do
+    it 'creates the album and returns a confirmation page' do
+      response = post('/albums', title: "my_album")
 
       expect(response.status).to eq(200)
-      expect(response.body).to eq("")
-
-      response = get('/artists')
-      expect(response.body).to include("Wild Nothing")
+      expect(response.body).to include('<h1>Album saved: my_album</h1>')
     end
   end
 end
