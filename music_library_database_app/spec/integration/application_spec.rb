@@ -27,14 +27,13 @@ describe Application do
     it 'returns a list of albums' do
       response = get("/albums")
 
-      expected_response = 'Doolittle, Surfer Rosa, Waterloo, Super Trouper, Bossanova, Lover, Folklore, I Put a Spell on You, Baltimore, Here Comes the Sun, Fodder on My Wings, Ring Ring'
-
       expect(response.status).to eq(200)
-      expect(response.body).to eq(expected_response)
+      expect(response.body).to include("<div> Title: Doolittle<br> Released: 1989</div><br>")
+      expect(response.body).to include("<div> Title: Fodder on My Wings<br> Released: 1982</div><br>")
     end
   end
 
-  context "GET/artists" do
+  context "GET /artists" do
     it 'returns the list of artists' do
       response = get('/artists')
 
@@ -45,7 +44,7 @@ describe Application do
     end
   end
 
-  context "GET/artists/:id" do
+  context "GET /artists/:id" do
     it 'returns info about album 1' do
       response = get('/albums/1')
 
@@ -68,7 +67,7 @@ describe Application do
     end
   end
 
-  context "POST/artists" do
+  context "POST /artists" do
     it 'creates a new artist' do
       response = post('/artists', name: 'Wild Nothing', genre: 'Indie')
 
