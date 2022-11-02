@@ -11,8 +11,11 @@ class Application < Sinatra::Base
   end
 
   post '/hello' do
-    @name = params[:name]
-
-    return erb(:hello)
+    @name = (params[:name])
+    if @name.match(/^[a-zA-Z]+$/)
+      return erb(:hello)
+    else
+      return erb(:error)
+    end
   end
 end
